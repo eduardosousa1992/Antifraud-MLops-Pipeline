@@ -1,0 +1,48 @@
+name: MLOps Antifraud CI Pipeline
+
+# O fluxo será disparado automaticamente a cada push na branch main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Clonar o repositório dentro do servidor do GitHub
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # Step 2: Instalar e configurar o Python na máquina virtual
+    - name: Set up Python 3.10
+      uses: actions/actions-setup-python@v5
+      with:
+        python-version: "3.10"
+
+    # Step 3: Cache de dependências para o processo rodar mais rápido
+    - name: Cache Pip Dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    # Step 4: Instalar os pacotes que você listou
+    - name: Install Software Quality Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pandas numpy scikit-learn
+
+    # Step 5: Executar o pipeline de dados real para garantir que o modelo treina sem erros
+    - name: Execute Antifraud Pipeline
+      run: |
+        python pipeline.py
+
+    # Step 6: Rodar a sua suíte de testes automatizados (Pytest)
+    - name: Run Pytest Suite (Sanity QA Check)
+      run: |
+        pytest test_pipeline.py -v
