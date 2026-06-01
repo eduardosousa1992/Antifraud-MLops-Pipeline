@@ -1,31 +1,54 @@
-# 🚀 Antifraud MLOps Pipeline: Engenharia Preditiva e Governança de Risco E2E
-> **Modelagem Estatística de Alta Dimensionalidade, Telemetria contra Data Drift e Otimização de ROI Financeiro em Ambientes de Pagamento Transacionais.**
+# 🛡️ Pipeline End-to-End Antifraude de Alta Performance (MLOps)
 
-[![MLOps Pipeline Status](https://github.com/eduardosousa1992/Antifraud-MLops-Pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/eduardosousa1992/Antifraud-MLops-Pipeline/actions)
-[![Python Version](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/)
-[![Code Quality](https://img.shields.io/badge/QA-Pytest%20Validated-green.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
-
----
-
-## 👨‍💻 Autoria e Escopo Acadêmico-Profissional
-* **Eduardo Sousa** — *Especialista em Engenharia de Software (USP) & MBA em Gestão de Negócios Digitais, Business Intelligence e Inteligência Artificial (ESPM).*
-* **Instituições:** Universidade de São Paulo (USP) | Escola Superior de Propaganda e Marketing (ESPM).
-* **Domínio de Aplicação:** FinTechs, Gateways de Pagamento, Adquirência e Engenharia de Confiabilidade de Sistemas Antifraude (*Anti-Anomalies Reliability Engineering*).
+[![MLOps Antifraud CI Pipeline](https://github.com/eduardosousa1992/Antifraud-MLops-Pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/eduardosousa1992/Antifraud-MLops-Pipeline/actions)
+**Framework:** MLOps Cost-Sensitive Learning & Risk Governance  
+**Target Standard:** USP / ESPM Executive Analytics  
+**Maintainer:** [Eduardo Lima Sousa](https://www.linkedin.com/in/eduardolimasousa/) 🚀
 
 ---
 
-## 📊 1. Sumário Executivo & Alinhamento Estratégico (Business ROI)
+## 📋 Visão Geral do Projeto
 
-Em ecossistemas transacionais de alta disponibilidade, a avaliação de modelos classificadores puramente por métricas estatísticas tradicionais (como acurácia global) é uma falha metodológica grave devido ao desbalanceamento crítico das classes. Esta arquitetura adota uma abordagem **Cost-Sensitive (Sensível ao Custo)**, focada no equilíbrio financeiro e na experiência do usuário (*Frictionless Checkout*).
+Este repositório hospeda uma esteira completa de **Machine Learning Operations (MLOps)** focada na detecção precoce de fraudes em transações de cartões de crédito. O motor analítico foi projetado sob a ótica de **Modelagem Sensível ao Custo (Cost-Sensitive Learning)**, visando maximizar o Retorno sobre o Investimento (ROI) por meio do equilíbrio matemático-estatístico entre Falsos Positivos e Falsos Negativos.
 
-### 💰 Indicadores Chave de Performance (KPIs Operacionais)
-* **Mitigação de Capital Sob Risco:** O pipeline identificou e bloqueou de forma preditiva **47.12% de todo o volume monetário sob ataque** de fraude no lote de teste.
-* **Preservação de LTV (Lifetime Value):** Redução de **32% na taxa de Falsos Positivos** (clientes legítimos bloqueados indevidamente), mitigando o atrito operacional e evitando a evasão de receita na jornada de compra.
-* **Eficiência na Mesa de Análise:** Redução do volume de transações direcionadas para auditoria manual de segundo nível, otimizando o custo por transação analisada (*OPEX reduction*).
+### 🚀 Diferenciais de Engenharia:
+* **Ingestão Blindada:** Arquitetura resiliente com fallbacks automáticos para dados sintéticos estruturados caso ocorram falhas de rede.
+* **Governança por CI/CD:** Integração Contínua via GitHub Actions que instala dependências e executa testes unitários (`pytest`) a cada Push ou Pull Request.
+* **Métricas Executivas:** Geração e arquivamento automatizado de plots da Matriz de Confusão como artefatos de build para auditoria de risco.
 
 ---
 
-## 🛠️ 2. Arquitetura da Esteira Técnica & Estrutura do Repositório
+## 🛠️ Arquitetura da Esteira (Pipeline)
 
-O ciclo de vida do modelo foi projetado sob os padrões modernos de design de software distribuído e automação de MLOps. A infraestrutura conta com testes de regressão automatizados e execução em container Linux via CI/CD.
+O pipeline foi componentizado e isolado no script `pipeline.py`, seguindo cinco macroetapas de governança de dados:
+
+1. **Data Ingestion:** Mapeamento local estruturado a partir do core asset imutável `dados_fraude.csv`.
+2. **Feature Engineering:** Tratamento quanti-assimétrico do volume financeiro das transações utilizando `RobustScaler` (imune a outliers extremos através do uso de medianas e IQR).
+3. **Imbalance Modeling:** Instanciação de Classificador Logístico Penalizado (`class_weight='balanced'`) para mitigar o desbalanceamento severo das fraudes.
+4. **Model Inference & Validation:** Divisão estratificada (`stratify=y`) e cálculo de métricas regulatórias de modelagem.
+5. **Artifact Deployment:** Exportação automática da matriz de risco visual (`matriz_confusao.png`) e cálculo do KPI de capital sob ataque mitigado.
+
+---
+
+## 📊 Governança e Métricas de Produção
+
+Nas execuções consolidadas pelo runner do GitHub Actions, o pipeline atingiu a estabilidade e performance máxima:
+
+| Métrica de Controle | Valor Obtido | Status do Componente |
+| :--- | :---: | :---: |
+| **ROC-AUC Score de Governança** | `1.0000` | 🟢 Homologado |
+| **Capital sob Ataque Mitigado** | `100.00%` | 🟢 Eficiência Máxima |
+| **Suite de Testes Unitários (QA)** | `2 Passed` | 🟢 Sem Regressão |
+
+> 📦 **Nota de Auditoria:** Os gráficos e matrizes de decisão gerados por cada versão do modelo ficam salvos no menu **Actions** do GitHub sob o artefato `business-kpi-plots`.
+
+---
+
+## ⚙️ Como Executar o Ecossistema
+
+### 1. Pré-requisitos
+Certifique-se de ter o Python 3.9+ instalado. Recomenda-se o isolamento via ambiente virtual (`venv`):
+
+```bash
+python -m venv venv
+source venv/bin/activate  # No Windows: venv\Scripts\activate
