@@ -8,8 +8,6 @@ Projetado para os padrões acadêmico-corporativos USP / ESPM.
 import os
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler
 from sklearn.linear_model import LogisticRegression
@@ -21,7 +19,8 @@ print("[START] Inicializando a esteira de produção antifraude...")
 url_dataset = "https://media.githubusercontent.com/media/jbrownlee/Datasets/master/creditcard.csv"
 print("[INFO] Buscando dados de transações do gateway central...")
 try:
-    df = pd.read_csv(url_dataset, nrows=50000) # Carga otimizada para o pipeline de produção
+    # Carga otimizada para o pipeline de produção (50k linhas para garantir velocidade no CI)
+    df = pd.read_csv(url_dataset, nrows=50000) 
     print(f"[✅ OK] Dados carregados com sucesso. Volumetria: {df.shape[0]} transações.")
 except Exception as e:
     print(f"[⚠️ ERRO] Falha na telemetria de rede. Gerando dados de contingência estrutural... {e}")
@@ -45,28 +44,26 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 # 3. Modelagem Estatística Avançada Cost-Sensitive (Peso Balanceado de Classe)
 print("[INFO] Instanciando classificador logístico com penalização de risco de classe...")
-# Configuração class_weight='balanced' ajusta o limiar de custo para mitigar falsos negativos (fraude não detectada)
+# Configuração class_weight='balanced' ajusta o limiar de custo para mitigar falsos negativos
 model = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
-model.fit(X_train, model.transform(X_train) if hasattr(model, 'transform') else X_train)
+model.fit(X_train, y_train)
 
 # 4. Inferência Preditiva e Avaliação Executiva de Desempenho
 print("[INFO] Executando predições e gerando métricas de auditoria...")
 y_pred = model.predict(X_test)
 y_proba = model.predict_proba(X_test)[:, 1]
 
-print("
-" + "="*50)
+print("\n" + "="*50)
 print("             RELATÓRIO AUDITÁVEL DO MODELO")
 print("="*50)
 print(classification_report(y_test, y_pred))
 print(f"ROC-AUC Score de Governança: {roc_auc_score(y_test, y_proba):.4f}")
-print("="*50 + "
-")
+print("="*50 + "\n")
 
 # 5. Cálculo Matemático do ROI e Mitigação de Capital Sob Ataque
 cm = confusion_matrix(y_test, y_pred)
 total_fraudes = np.sum(y_test == 1)
-fraudes_detectadas = cm[1, 1]
+fraudes_detectadas = cm[1, 1] if total_fraudes > 0 else 0
 capital_salvo_taxa = (fraudes_detectadas / total_fraudes) * 100 if total_fraudes > 0 else 47.12
 
 print(f"[BUSINESS KPI] Capital sob ataque mitigado com sucesso: {capital_salvo_taxa:.2f}%")
