@@ -18,7 +18,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_auc_sco
 print("[START] Inicializando a esteira de produção antifraude...")
 
 # 1. Ingestão de Dados Seguro (Utilizando um espelho estável do Credit Card Fraud Detection)
-url_dataset = "https://raw.githubusercontent.com/nsethi31/Credit-Card-Fraud-Detection/master/creditcard.csv"
+url_dataset = "https://raw.githubusercontent.com/davidechicco/creditcardfraud/main/creditcard.csv"
 print("[INFO] Buscando dados de transações do gateway central seguro...")
 
 try:
