@@ -20,7 +20,7 @@ print("[START] Inicializando a esteira de produção antifraude...")
 # 1. Ingestão de Dados Seguro (Priorizando arquivo local para governança de dados)
 print("[INFO] Buscando dados de transações do repositório local...")
 try:
-    # Busca o CSV local que você subiu no repositório
+    # Busca o CSV local criado no repositório
     df = pd.read_csv("dados_fraude.csv") 
     print(f"[✅ OK] Dados reais carregados com sucesso. Volumetria: {df.shape[0]} transações.")
 except Exception as e:
@@ -36,8 +36,11 @@ print("[INFO] Executando Robust Scaling na variável de volume financeiro (Amoun
 scaler = RobustScaler()
 df['Amount_Scaled'] = scaler.fit_transform(df['Amount'].values.reshape(-1, 1))
 
-# Definição das variáveis preditivas e alvo
-X = df.drop(['Time', 'Amount', 'Class'], axis=1)
+# Identificação e remoção dinâmica de colunas operacionais se presentes no DataFrame
+colunas_para_remover = [col for col in ['Time', 'Amount', 'Class'] if col in df.columns]
+colunas_preditivas = [col for col in df.columns if col not in ['Class', 'Time', 'Amount']]
+
+X = df[colunas_preditivas]
 y = df['Class']
 
 # Divisão controlada mantendo a proporção crítica de fraudes (stratify)
@@ -60,7 +63,7 @@ print(classification_report(y_test, y_pred))
 print(f"ROC-AUC Score de Governança: {roc_auc_score(y_test, y_proba):.4f}")
 print("="*50 + "\n")
 
-# 5. Cálculo Matemático do ROI e Salvamento de Artefatos Gráficos
+# 5. Calculation do ROI e Salvamento de Artefatos Gráficos
 cm = confusion_matrix(y_test, y_pred)
 total_fraudes = np.sum(y_test == 1)
 fraudes_detectadas = cm[1, 1] if total_fraudes > 0 else 0
